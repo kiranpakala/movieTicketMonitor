@@ -27,7 +27,11 @@ def booking_Page(movie, theater, account_sid, auth_token):
     sleep(5)
     driver.find_element(By.XPATH, "//img[@alt='" + movie + "']").click()
     sleep(2)
+
+
     driver.find_element(By.XPATH, "//div[@id='page-cta-container']").click()
+    sleep(2)
+    driver.find_element(By.XPATH, "(//div[@class='sc-vhz3gb-3 bvxsIo'])[3]").click()
     sleep(2)
     theatersTotal = driver.find_elements(By.XPATH,"//div[@class ='listing-info']")
     print(len(theatersTotal))
@@ -36,6 +40,7 @@ def booking_Page(movie, theater, account_sid, auth_token):
         sms_Alert(account_sid, auth_token, message)
     a = 1
     countmsg = 1
+    checkNum = 1
     while a==1:
         if len(driver.find_elements(By.XPATH, "//div[@class ='listing-info']//a[contains(text(), '" + theater + "')]")) > 0:
             message = theater + " available"
@@ -44,13 +49,18 @@ def booking_Page(movie, theater, account_sid, auth_token):
             break
         if len(theatersTotal) > 55:
             message = "Theaters added"
+
             if(countmsg == 1):
                 sms_Alert(account_sid, auth_token, message)
                 countmsg = 2
                 break
         else:
-            sleep(300)
-            print(theater+" Not Available")
+            sleep(150
+                  )
+            print(theater+" Not Available - round No:"
+                  +str(checkNum))
+            checkNum+=1
+            driver.refresh()
             continue
     #   twilio:::: id 8886589919 password Pythonsmsindia1234
     driver.close()
@@ -77,10 +87,10 @@ if __name__ == '__main__':
     driver.implicitly_wait(10)
     driver.get('https://www.bookmyshow.com')
     driver.maximize_window()
-    movie = "Bheemla Nayak"
+    movie = "RRR"
     Theater = "Forum"
     account_sid = "ACc445c05af8aafefd18f7752dfa205998"
-    auth_token = "b2e28e5d691c31364c7e73496802135d"
+    auth_token = "df8e20b1baca95e7af2e79911a00221a"
     try:
         booking_Page(movie, Theater, account_sid, auth_token)
     except  Exception as e:
